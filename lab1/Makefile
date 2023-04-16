@@ -8,3 +8,12 @@ smoke:
 
 fizz:
 	cat fizz.txt | ./hex2raw | ./bufbomb -u $(ID)
+
+bang-code:
+	gcc -o bang -O1 bang.c -m32 -g
+	objdump -d bang -Sl -j .text > bang.s
+
+bang:
+	cat bang.txt | ./hex2raw | ./bufbomb -u $(ID)
+
+.PHONY: bang smoke fizz buf_size bang-code
