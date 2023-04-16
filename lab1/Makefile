@@ -16,4 +16,11 @@ bang-code:
 bang:
 	cat bang.txt | ./hex2raw | ./bufbomb -u $(ID)
 
-.PHONY: bang smoke fizz buf_size bang-code
+boom:
+	cat boom.txt | ./hex2raw | ./bufbomb -u $(ID)
+
+boom-code:
+	gcc -o boom -O1 boom.c -m32 -g
+	objdump -d boom -Sl -j .text > boom.s
+
+.PHONY: bang smoke fizz buf_size bang-code boom boom-code
