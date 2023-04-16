@@ -5,3 +5,6 @@ buf_size:
 
 smoke:
 	cat smoke.txt | ./hex2raw | ./bufbomb -u $(ID)
+
+fizz:
+	cat fizz.txt | ./hex2raw | ./bufbomb -u $(ID)

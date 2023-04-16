@@ -17,6 +17,6 @@
 30 30 30 30
 30 30
 /* overflow: EBP */
-31 94 04 08
+30 30 30 30
 /* overflow: return address */
 31 94 04 08
