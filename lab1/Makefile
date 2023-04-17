@@ -23,4 +23,11 @@ boom-code:
 	gcc -o boom -O1 boom.c -m32 -g
 	objdump -d boom -Sl -j .text > boom.s
 
-.PHONY: bang smoke fizz buf_size bang-code boom boom-code
+kaboom:
+	cat kaboom.txt | ./hex2raw | ./bufbomb -n -u $(ID)
+
+kaboom-code:
+	gcc -o kaboom -O1 kaboom.c -m32 -g
+	objdump -d kaboom -Sl -j .text > kaboom.s
+
+.PHONY: bang smoke fizz buf_size bang-code boom boom-code kaboom kaboom-code
