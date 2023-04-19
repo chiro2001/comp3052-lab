@@ -24,7 +24,7 @@ boom-code:
 	objdump -d boom -Sl -j .text > boom.s
 
 kaboom:
-	cat kaboom.txt | ./hex2raw | ./bufbomb -n -u $(ID)
+	cat kaboom.txt | ./hex2raw -n | ./bufbomb -n -u $(ID)
 
 kaboom-code:
 	gcc -o kaboom -O1 kaboom.c -m32 -g

