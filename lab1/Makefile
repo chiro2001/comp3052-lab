@@ -30,4 +30,8 @@ kaboom-code:
 	gcc -o kaboom -O1 kaboom.c -m32 -g
 	objdump -d kaboom -Sl -j .text > kaboom.s
 
-.PHONY: bang smoke fizz buf_size bang-code boom boom-code kaboom kaboom-code
+submit:
+	tar cf 200110619.tar smoke.txt fizz.txt bang.txt boom.txt kaboom.txt
+	zip 200110619.zip *.pdf 200110619.tar
+
+.PHONY: bang smoke fizz buf_size bang-code boom boom-code kaboom kaboom-code submit
