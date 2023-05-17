@@ -11,7 +11,16 @@ CC = gcc
 CFLAGS = -Wall -O2
 FILES = $(TSH) ./myspin ./mysplit ./mystop ./myint
 
+CFLAGS += -I./include
+
 all: $(FILES)
+
+$(TSH): tsh.c
+	$(CC) $(CFLAGS) -DUSE_TSH=1 -o $@ $< csapp.c
+
+# all files
+%: %.c
+	$(CC) $(CFLAGS) -o $@ $< csapp.c
 
 ##################
 # Handin your work

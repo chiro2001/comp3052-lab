@@ -3,6 +3,7 @@
  * 
  * <Put your name and login ID here>
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -12,9 +13,12 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include "csapp.h"
 
 /* Misc manifest constants */
+#ifndef MAXLINE
 #define MAXLINE    1024   /* max line size */
+#endif
 #define MAXARGS     128   /* max args on a command line */
 #define MAXJOBS      16   /* max jobs at any point in time */
 #define MAXJID    1<<16   /* max job ID */
@@ -80,10 +84,10 @@ int pid2jid(pid_t pid);
 void listjobs(struct job_t *jobs);
 
 void usage(void);
-void unix_error(char *msg);
-void app_error(char *msg);
-typedef void handler_t(int);
-handler_t *Signal(int signum, handler_t *handler);
+// void unix_error(char *msg);
+// void app_error(char *msg);
+// typedef void handler_t(int);
+// handler_t *Signal(int signum, handler_t *handler);
 
 /*
  * main - The shell's main routine 
