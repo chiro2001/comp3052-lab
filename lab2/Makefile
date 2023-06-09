@@ -9,7 +9,7 @@ TSHREF = ./tshref
 TSHARGS = "-p"
 CC = gcc
 CFLAGS = -Wall -O2
-FILES = $(TSH) ./myspin ./mysplit ./mystop ./myint
+FILES = $(TSH) ./myspin ./mysplit ./mystop ./myint ./myecho
 
 CFLAGS += -I./include
 
@@ -101,6 +101,8 @@ rtest15:
 rtest16:
 	$(DRIVER) -t trace16.txt -s $(TSHREF) -a $(TSHARGS)
 
+run: all
+	./tsh
 
 # clean up
 clean:
