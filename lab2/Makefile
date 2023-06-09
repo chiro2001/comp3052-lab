@@ -5,11 +5,12 @@ VERSION = 1
 HANDINDIR = /afs/cs/academic/class/15213-f02/L5/handin
 DRIVER = ./sdriver.pl
 TSH = ./tsh
+TSH_DBG = $(TSH)-dbg
 TSHREF = ./tshref
 TSHARGS = "-p"
 CC = gcc
 CFLAGS = -Wall -O2
-FILES = $(TSH) ./myspin ./mysplit ./mystop ./myint ./myecho
+FILES = $(TSH) $(TSH)-dbg ./myspin ./mysplit ./mystop ./myint ./myecho
 
 CFLAGS += -I./include
 
@@ -17,6 +18,9 @@ all: $(FILES)
 
 $(TSH): tsh.c
 	$(CC) $(CFLAGS) -DUSE_TSH=1 -o $@ $< csapp.c
+
+$(TSH_DBG): tsh.c
+	$(CC) $(CFLAGS) -DUSE_TSH=1 -DCONFIG_PRINT_LOG=1 -o $@ $< csapp.c
 
 # all files
 %: %.c
@@ -101,8 +105,8 @@ rtest15:
 rtest16:
 	$(DRIVER) -t trace16.txt -s $(TSHREF) -a $(TSHARGS)
 
-run: all
-	./tsh
+run: $(TSH_DBG)
+	$(TSH_DBG)
 
 # clean up
 clean:

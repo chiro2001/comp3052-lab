@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
-#ifndef CONFIG_PRINT_LOG
-#define CONFIG_PRINT_LOG 1
-#endif
+// #ifndef CONFIG_PRINT_LOG
+// #define CONFIG_PRINT_LOG 1
+// #endif
 
 // #ifndef CONFIG_FILE_LOG
 // #define CONFIG_FILE_LOG 1
