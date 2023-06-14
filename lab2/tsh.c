@@ -193,7 +193,7 @@ void eval(char *cmdline) {
     // move child process to a new process group
     setpgid(0, 0);
     if (execve(argv[0], argv, environ) < 0) {
-      Log("%s: Command not found\n", argv[0]);
+      printf("%s: Command not found\n", argv[0]);
       exit(0);
     }
   } else {
@@ -201,7 +201,7 @@ void eval(char *cmdline) {
     sigprocmask(SIG_UNBLOCK, &sigset, NULL);
     if (bg) {
       addjob(jobs, pid, BG, cmdline);
-      Log("[%d] (%d) %s", pid2jid(pid), pid, cmdline);
+      printf("[%d] (%d) %s\n", pid2jid(pid), pid, cmdline);
     } else {
       addjob(jobs, pid, FG, cmdline);
     }
@@ -367,12 +367,12 @@ void sigchld_handler(int sig) {
       deletejob(jobs, pid);
       Log("Job [%d] (%d) exited normally", pid2jid(pid), pid);
     } else if (WIFSIGNALED(status)) {
-      Log("Job [%d] (%d) terminated by signal %d", pid2jid(pid), pid,
-          WTERMSIG(status));
+      printf("Job [%d] (%d) terminated by signal %d\n", pid2jid(pid), pid,
+             WTERMSIG(status));
       deletejob(jobs, pid);
     } else if (WIFSTOPPED(status)) {
-      Log("Job [%d] (%d) stopped by signal %d", pid2jid(pid), pid,
-          WSTOPSIG(status));
+      printf("Job [%d] (%d) stopped by signal %d\n", pid2jid(pid), pid,
+             WSTOPSIG(status));
       getjobpid(jobs, pid)->state = ST;
     }
   }
@@ -384,14 +384,32 @@ void sigchld_handler(int sig) {
  *    user types ctrl-c at the keyboard.  Catch it and send it along
  *    to the foreground job.
  */
-void sigint_handler(int sig) { return; }
+void sigint_handler(int sig) {
+  Log("sigint_handler(sig=%d)", sig);
+  pid_t pid = fgpid(jobs);
+  if (pid) {
+    kill(-pid, SIGINT);
+    Log("Job [%d] (%d) terminated by signal %d", pid2jid(pid), pid, sig);
+    // jobs->state = ST;
+  }
+  return;
+}
 
 /*
  * sigtstp_handler - The kernel sends a SIGTSTP to the shell whenever
  *     the user types ctrl-z at the keyboard. Catch it and suspend the
  *     foreground job by sending it a SIGTSTP.
  */
-void sigtstp_handler(int sig) { return; }
+void sigtstp_handler(int sig) {
+  Log("sigtstp_handler(sig=%d)", sig);
+  pid_t pid = fgpid(jobs);
+  if (pid) {
+    kill(-pid, SIGTSTP);
+    Log("Job [%d] (%d) stopped by signal %d", pid2jid(pid), pid, sig);
+    // jobs->state = ST;
+  }
+  return;
+}
 
 /*********************
  * End signal handlers
