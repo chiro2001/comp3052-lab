@@ -312,7 +312,7 @@ void do_bgfg(char **argv) {
       kill(-job->pid, SIGCONT);
       waitfg(job->pid);
     }
-  } else {
+  } else if ('0' <= argv[1][0] && argv[1][0] <= '9') {
     pid_t pid = atoi(argv[1]);
     struct job_t *job = getjobpid(jobs, pid);
     if (!job) {
@@ -328,6 +328,8 @@ void do_bgfg(char **argv) {
       kill(-job->pid, SIGCONT);
       waitfg(job->pid);
     }
+  } else {
+    printf("%s: argument must be a PID or %%jobid\n", argv[0]);
   }
   return;
 }
