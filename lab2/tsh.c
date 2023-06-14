@@ -201,7 +201,7 @@ void eval(char *cmdline) {
     sigprocmask(SIG_UNBLOCK, &sigset, NULL);
     if (bg) {
       addjob(jobs, pid, BG, cmdline);
-      printf("[%d] (%d) %s\n", pid2jid(pid), pid, cmdline);
+      printf("[%d] (%d) %s", pid2jid(pid), pid, cmdline);
     } else {
       addjob(jobs, pid, FG, cmdline);
     }
@@ -303,13 +303,12 @@ void do_bgfg(char **argv) {
       printf("%s: No such job\n", argv[1]);
       return;
     }
+    Assert(kill(-job->pid, SIGCONT) >= 0, "kill failed for pid %d", -job->pid);
     if (argv[0][0] == 'b') {
       job->state = BG;
       printf("[%d] (%d) %s", job->jid, job->pid, job->cmdline);
-      kill(-job->pid, SIGCONT);
     } else {
       job->state = FG;
-      kill(-job->pid, SIGCONT);
       waitfg(job->pid);
     }
   } else if ('0' <= argv[1][0] && argv[1][0] <= '9') {
@@ -319,13 +318,12 @@ void do_bgfg(char **argv) {
       printf("(%d): No such process\n", pid);
       return;
     }
+    Assert(kill(-job->pid, SIGCONT) >= 0, "kill failed for pid %d", -job->pid);
     if (argv[0][0] == 'b') {
       job->state = BG;
       printf("[%d] (%d) %s", job->jid, job->pid, job->cmdline);
-      kill(-job->pid, SIGCONT);
     } else {
       job->state = FG;
-      kill(-job->pid, SIGCONT);
       waitfg(job->pid);
     }
   } else {
@@ -341,7 +339,7 @@ void waitfg(pid_t pid) {
   struct job_t *job = getjobpid(jobs, pid);
   if (!job) return;
   while (job->state == FG) {
-    // Log("waiting for foreground job: %d", pid);
+    Log("waiting for foreground job: %d", pid);
     sleep(1);
   }
   return;
@@ -366,8 +364,8 @@ void sigchld_handler(int sig) {
   // ptrace(2))
   while ((pid = waitpid(-1, &status, WNOHANG | WUNTRACED)) > 0) {
     if (WIFEXITED(status)) {
-      deletejob(jobs, pid);
       Log("Job [%d] (%d) exited normally", pid2jid(pid), pid);
+      deletejob(jobs, pid);
     } else if (WIFSIGNALED(status)) {
       printf("Job [%d] (%d) terminated by signal %d\n", pid2jid(pid), pid,
              WTERMSIG(status));
@@ -390,7 +388,7 @@ void sigint_handler(int sig) {
   Log("sigint_handler(sig=%d)", sig);
   pid_t pid = fgpid(jobs);
   if (pid) {
-    kill(-pid, SIGINT);
+    Assert(kill(-pid, SIGINT) >= 0, "kill failed for pid %d", pid);
     Log("Job [%d] (%d) terminated by signal %d", pid2jid(pid), pid, sig);
     // jobs->state = ST;
   }
@@ -406,7 +404,7 @@ void sigtstp_handler(int sig) {
   Log("sigtstp_handler(sig=%d)", sig);
   pid_t pid = fgpid(jobs);
   if (pid) {
-    kill(-pid, SIGTSTP);
+    Assert(kill(-pid, SIGTSTP) >= 0, "kill failed for pid %d", pid);
     Log("Job [%d] (%d) stopped by signal %d", pid2jid(pid), pid, sig);
     // jobs->state = ST;
   }

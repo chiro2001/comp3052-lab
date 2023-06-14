@@ -10,7 +10,7 @@ TSHREF = ./tshref
 TSHARGS = "-p"
 CC = gcc
 CFLAGS = -Wall -O2
-FILES = $(TSH) $(TSH)-dbg ./myspin ./mysplit ./mystop ./myint ./myecho
+FILES = $(TSH) $(TSH_DBG) ./myspin ./mysplit ./mystop ./myint ./myecho
 
 CFLAGS += -I./include
 
@@ -38,15 +38,20 @@ handin:
 ##################
 
 # Run tests using the student's shell program
-test%: $(TSH) $(TSH_DBG)
+test%: $(FILES)
 	$(DRIVER) -t trace$*.txt -s $(TSH) -a $(TSHARGS)
 
 # Run the tests using the reference shell program
-rtest%: $(TSH) $(TSH_DBG)
+rtest%: $(FILES)
 	$(DRIVER) -t trace$*.txt -s $(TSHREF) -a $(TSHARGS)
 
 # difftest
-dtest%: $(TSH) $(TSH_DBG)
+dtest%: $(FILES)
+	$(DRIVER) -t trace$*.txt -s $(TSHREF) -a $(TSHARGS)
+	$(DRIVER) -t trace$*.txt -s $(TSH) -a $(TSHARGS)
+
+# difftest debug
+ddtest%: $(FILES)
 	$(DRIVER) -t trace$*.txt -s $(TSHREF) -a $(TSHARGS)
 	$(DRIVER) -t trace$*.txt -s $(TSH_DBG) -a $(TSHARGS)
 
